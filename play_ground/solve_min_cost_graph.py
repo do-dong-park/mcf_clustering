@@ -27,6 +27,8 @@ def solve_min_cost_flow_graph(edges, costs, capacities, supplies, n_C, n_X):
 
     # Add node supplies
     min_cost_flow.set_nodes_supplies(np.arange(len(supplies)), supplies)
+    
+    print(min_cost_flow.solve())
 
     # Find the minimum cost flow between node 0 and node 4.
     if min_cost_flow.solve() != min_cost_flow.OPTIMAL:
