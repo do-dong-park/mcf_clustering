@@ -19,7 +19,6 @@ def solve_min_cost_flow_graph(edges, costs, capacities, supplies, n_C, n_X):
     N_edges = edges.shape[0]
     N_nodes = len(supplies)
 
-    print(edges)
     # Add each edge with associated capacities and cost
     min_cost_flow.add_arcs_with_capacity_and_unit_cost(
         edges[:, 0], edges[:, 1], capacities, costs
@@ -31,8 +30,8 @@ def solve_min_cost_flow_graph(edges, costs, capacities, supplies, n_C, n_X):
     print(min_cost_flow.solve())
 
     # Find the minimum cost flow between node 0 and node 4.
-    if min_cost_flow.solve() != min_cost_flow.OPTIMAL:
-        raise Exception("There was an issue with the min cost flow input.")
+    # if min_cost_flow.solve() != min_cost_flow.OPTIMAL:
+    #     raise Exception("There was an issue with the min cost flow input.")
 
     # Assignment
     labels_M = (

@@ -1,3 +1,4 @@
+import numpy as np
 def minimum_cost_flow_problem_graph(X, C, D, size_min, size_max):
     # Setup minimum cost flow formulation graph
     # Vertices indexes:
@@ -6,6 +7,7 @@ def minimum_cost_flow_problem_graph(X, C, D, size_min, size_max):
 
     # Create indices of nodes
     n_X = X.shape[0]
+    print(type(C))
     n_C = C.shape[0]
     X_ix = np.arange(n_X)
     C_dummy_ix = np.arange(X_ix[-1] + 1, X_ix[-1] + 1 + n_C)

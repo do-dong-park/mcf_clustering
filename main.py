@@ -54,12 +54,12 @@ if __name__ == '__main__':
     
     # constrained input : areas, required_areas
     
-    clf = KMeansConstrained(
-    n_clusters= num_clusters,
-    size_min=None,
-    size_max=None,
-    random_state=0
-    )
+    # clf = KMeansConstrained(
+    # n_clusters= num_clusters,
+    # size_min=None,
+    # size_max=None,
+    # random_state=0
+    # )
     
-    clf.fit_predict(coordes)
-    save_visualization_result(dataset['x'],dataset['y'],clf.labels_)
+    # clf.fit_predict(coordes)
+    # save_visualization_result(dataset['x'],dataset['y'],clf.labels_)
