@@ -43,6 +43,7 @@ if __name__ == '__main__':
         
         data_loader = DataLoader(folder_path+file_name)
         dataset = data_loader.dataset
+        save_visualization_pre_result(dataset['x'],dataset['y'],file_name)
 
         # 좌표 목록과 area 목록
         coordes = data_loader.convert_to_coordes()
@@ -54,7 +55,6 @@ if __name__ == '__main__':
         required_areas = split_integer_randomly(sum(areas),num_clusters)
     
         # constrained input : areas, required_areas
-    
         kmeans_constrained = KMeansConstrained(areas, required_areas)
         kmeans_constrained.fit_predict(coordes)
-        save_visualization_result(dataset['x'],dataset['y'],clf.labels_)
+        save_visualization_result(dataset['x'],dataset['y'],kmeans_constrained.labels_,file_name)

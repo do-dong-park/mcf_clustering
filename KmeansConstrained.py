@@ -51,6 +51,7 @@ class KMeansConstrained(KMeans):
     def fit(self, X, y=None):
         random_state = check_random_state(self.random_state)
         X = self._check_fit_data(X)
+        
         (
             self.cluster_centers_,
             self.labels_,
@@ -134,6 +135,8 @@ def k_means_constrained(
                 best_labels = labels.copy()
                 best_centers = centers.copy()
                 best_inertia = inertia
+                best_n_iter = n_iter_
+                
     else:
         seeds = random_state.randint(np.iinfo(np.int32).max, size=n_init)
         results = Parallel(n_jobs=n_jobs, verbose=0)(
@@ -151,19 +154,22 @@ def k_means_constrained(
             )
             for seed in seeds
         )
+        
         labels, inertia, centers, n_iters = zip(*results)
-        print("n_iters")
-        print(n_iters)
+        
         best = np.argmin(inertia)
         best_labels = labels[best]
         best_inertia = inertia[best]
         best_centers = centers[best]
+        best_n_iter = n_iters[best]
+    
     if not sp.issparse(X):
         if not copy_x:
             X += X_mean
         best_centers += X_mean
+    
     if return_n_iter:
-        return best_centers, best_labels, best_inertia, n_iters[best]
+        return best_centers, best_labels, best_inertia, best_n_iter
     else:
         return best_centers, best_labels, best_inertia
 

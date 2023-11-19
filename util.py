@@ -93,17 +93,17 @@ def save_json_result(checkpoint,output_file_name):
     return
 
 
-def save_visualization_result(tmp_x, tmp_y, cluster_id):
+def save_visualization_result(tmp_x, tmp_y, cluster_id,file_name):
     plt.scatter(tmp_x, tmp_y, c=cluster_id)
-    plt.savefig(f'./clustering_result_img/{get_now_datetime()}.jpg', dpi=300)
+    plt.savefig(f'./clustering_result_img/{get_now_datetime() + file_name}.jpg', dpi=300)
 
     print("Visualization Save Completed")
 
     return
 
-def save_visualization_pre_result(timp_x,tmp_y):
+def save_visualization_pre_result(timp_x,tmp_y,file_name):
     plt.scatter(timp_x,tmp_y)
-    plt.savefig(f'./preclustering_img/{get_now_datetime()}.jpg', dpi=300)
+    plt.savefig(f'./preclustering_img/{get_now_datetime()+ file_name}.jpg', dpi=300)
     
 def split_integer_randomly(num, n):
     parts = sorted(random.sample(range(1, num), n - 1))
