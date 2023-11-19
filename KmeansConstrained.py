@@ -5,6 +5,7 @@ from sklearn_import.utils.validation import (
     check_is_fitted,
     as_float_array
 )
+from k_means_constrained.sklearn_import.cluster._k_means import _centers_dense, _centers_sparse
 from k_means_constrained.sklearn_import.cluster.k_means_ import (
     _validate_center_shape,
     _tolerance,
@@ -151,6 +152,8 @@ def k_means_constrained(
             for seed in seeds
         )
         labels, inertia, centers, n_iters = zip(*results)
+        print("n_iters")
+        print(n_iters)
         best = np.argmin(inertia)
         best_labels = labels[best]
         best_inertia = inertia[best]
@@ -218,8 +221,12 @@ def _labels_constrained(X, centers, areas, required_areas, distances):
     
     D = euclidean_distances(X, centers, squared=False)
     
-    labels = mcf_solver(areas, required_areas, D)
+    labels = mcf_solver(areas=areas, requested_areas=required_areas, costs=D)
     
     labels = labels.astype(np.int32)
+    
+    # Change distances in-place
+    distances[:] = D[np.arange(D.shape[0]), labels] ** 2  # Square for M step of EM
+    inertia = distances.sum()
     
     return labels, inertia

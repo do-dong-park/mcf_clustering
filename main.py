@@ -3,7 +3,7 @@ import matplotlib.pyplot as plt
 import os
 from random import randint
 from KmeansConstrained import KMeansConstrained
-
+import random
 from dataset import DataLoader
 from util import *
 
@@ -50,8 +50,8 @@ if __name__ == '__main__':
     
         # random 모듈을 사용하여 n개의 10000 이상의 난수로 구성된 리스트 생성
         num_clusters = 3
-        min_area = 10000  
-        required_areas = [randint(min_area, min_area + 10000) for _ in range(num_clusters)]
+        
+        required_areas = split_integer_randomly(sum(areas),num_clusters)
     
         # constrained input : areas, required_areas
     

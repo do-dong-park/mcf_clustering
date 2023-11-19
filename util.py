@@ -1,6 +1,7 @@
 import time
 import datetime
 import logging
+import random
 import json
 import pandas as pd
 import matplotlib.pyplot as plt
@@ -103,3 +104,9 @@ def save_visualization_result(tmp_x, tmp_y, cluster_id):
 def save_visualization_pre_result(timp_x,tmp_y):
     plt.scatter(timp_x,tmp_y)
     plt.savefig(f'./preclustering_img/{get_now_datetime()}.jpg', dpi=300)
+    
+def split_integer_randomly(num, n):
+    parts = sorted(random.sample(range(1, num), n - 1))
+    parts = [0] + parts + [num]
+    parts = [parts[i + 1] - parts[i] for i in range(n)]
+    return parts

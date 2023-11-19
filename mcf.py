@@ -10,8 +10,8 @@ def mcf_solver(areas: np.ndarray, requested_areas: np.ndarray, costs: np.ndarray
     requested_areas: 팀들의 요청된 면적
     costs: 중심점으로부터 필지간의 거리 행렬
     """
-    print(f"areas : {areas}")
-    print(f"requested_area : {requested_area}")
+    print(f"areas : {np.sum(areas)}")
+    print(f"requested_area : {np.sum(requested_areas)}")
     print(f"costs : {costs}")
     
     requested_areas = np.array (requested_areas) +tolerence
@@ -76,10 +76,11 @@ def mcf_solver(areas: np.ndarray, requested_areas: np.ndarray, costs: np.ndarray
                 # Arcs in the solution have a flow value of 1. Their start and end nodes
                 # give an assignment of worker to task.
                 if smcf.flow(arc) > 0:
-                    print(
-                        "Worker %d assigned to task %d.  Cost = %d"
-                        % (smcf.tail(arc), smcf.head(arc), smcf.unit_cost(arc))
-                    )
+                    pass
+                    # print(
+                    #     "Worker %d assigned to task %d.  Cost = %d"
+                    #     % (smcf.tail(arc), smcf.head(arc), smcf.unit_cost(arc))
+                    # )
     else:
         print("There was an issue with the min cost flow input.")
         print(f"Status: {status}")
@@ -94,12 +95,3 @@ def mcf_solver(areas: np.ndarray, requested_areas: np.ndarray, costs: np.ndarray
     labels = labels_M.argmax(axis=1)
     
     return labels
-
-
-if __name__ == "__main__":
-    areas = np.array([5, 10, 8, 3, 4, 10])
-    requested_areas = np.array([15, 11, 14, 4])
-    costs = np.array([[90, 76, 75, 70], [35, 85, 55, 65], [125, 95, 90, 105], [45, 110, 95, 115], [34, 25, 85, 54], [74, 87, 24, 55]])
-    # tolerence = np.array([3, 4, 2, 5])
-    tolerence = 3
-    mcf_solver(areas, requested_areas, costs, tolerence)
