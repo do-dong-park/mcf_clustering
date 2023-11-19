@@ -9,7 +9,6 @@ class DataLoader:
 
     Field's attribute : address, coordinate, Area, (polygon)
     """
-    
     def __init__(self, file_name):
         self.dataset = self.load_data(pd.read_csv(file_name))
         

@@ -1,8 +1,8 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-import random.randint as rdint
-from k_means_constrained import KMeansConstrained
-
+import os
+from random import randint
+from KmeansConstrained import KMeansConstrained
 
 from dataset import DataLoader
 from util import *
@@ -36,30 +36,25 @@ domain : The number of users (Clustering Result Set)
 
 if __name__ == '__main__':
     # 메인 함수 돌리기 전에 필요한 Setup
-    file_name = './asset/field_data.csv'
-    data_loader = DataLoader(file_name)
+    folder_path = './asset/'
+    files = os.listdir(folder_path)
 
-    dataset = data_loader.dataset
-    # 임시 클러스터링 전 이미지 저장
-    save_visualization_pre_result(dataset['x'],dataset['y'])
+    for file_name in files:
+        
+        data_loader = DataLoader(folder_path+file_name)
+        dataset = data_loader.dataset
 
-    # 좌표 목록과 area 목록
-    coordes = data_loader.convert_to_coordes()
-    areas = list(dataset['area'])
+        # 좌표 목록과 area 목록
+        coordes = data_loader.convert_to_coordes()
+        areas = list(dataset['area'])
     
-    # random 모듈을 사용하여 n개의 10000 이상의 난수로 구성된 리스트 생성
-    num_clusters = 3
-    min_area = 10000  
-    required_areas = [rdint(min_area, min_value + 10000) for _ in range(num_clusters)]
+        # random 모듈을 사용하여 n개의 10000 이상의 난수로 구성된 리스트 생성
+        num_clusters = 3
+        min_area = 10000  
+        required_areas = [randint(min_area, min_area + 10000) for _ in range(num_clusters)]
     
-    # constrained input : areas, required_areas
+        # constrained input : areas, required_areas
     
-    # clf = KMeansConstrained(
-    # n_clusters= num_clusters,
-    # size_min=None,
-    # size_max=None,
-    # random_state=0
-    # )
-    
-    # clf.fit_predict(coordes)
-    # save_visualization_result(dataset['x'],dataset['y'],clf.labels_)
+        kmeans_constrained = KMeansConstrained(areas, required_areas)
+        kmeans_constrained.fit_predict(coordes)
+        save_visualization_result(dataset['x'],dataset['y'],clf.labels_)
