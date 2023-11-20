@@ -194,7 +194,6 @@ def kmeans_constrained_single(
     )
     
     distances = np.zeros(shape=(n_samples,), dtype=X.dtype)
-    
     for i in range(max_iter):
         centers_old = centers.copy()
         labels, inertia = _labels_constrained(
@@ -226,8 +225,8 @@ def kmeans_constrained_single(
 def _labels_constrained(X, centers, areas, required_areas, distances):
     
     D = euclidean_distances(X, centers, squared=False)
-    
-    labels = mcf_solver(areas=areas, requested_areas=required_areas, costs=D)
+    D = (D * 100000000).astype(np.int64)
+    labels = mcf_solver(areas=areas, requested_areas=required_areas, costs=D, tolerence=200)
     
     labels = labels.astype(np.int32)
     
