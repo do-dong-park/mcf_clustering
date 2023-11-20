@@ -28,40 +28,35 @@ def get_now_datetime():
     timestamp = now.strftime("%Y.%m.%d %H:%M")
     return timestamp
 
-def save_checkpoint_clustering_results(input_file_name, output_file_name, cluster_id, cluster_area):
+def save_checkpoint_clustering_results(input_filename, output_filename, cluster_id):
     '''
     클러스터링 결과 체크 포인트를 저장하는 함수 (토지 데이터 + 군집화 결과 데이터)
-    :param output_file_name: 결과 파일 이름
-    :param input_file_name: 읽어올 토지 정보 파일 이름
+    :param output_filename: 결과 파일 이름
+    :param input_filename: 읽어올 토지 정보 파일 이름
     :param cluster_id: 클러스터링 결과 id
     :param cluster_area: 클러스터링 결과 면적값
     :return: checkpoint (csv)
     '''
-    lot_df = pd.read_csv(input_file_name, low_memory=False, encoding='UTF-8')
+    folder_path = "./data/"
+    lot_df = pd.read_csv(folder_path+input_filename, low_memory=False, encoding='UTF-8')
 
     cluster_id_df = pd.DataFrame(cluster_id, columns=['cluster_id'])
     # 클러스터링 아이디 데이터 타입 Int로 변경
     cluster_id_df = cluster_id_df.astype({"cluster_id": "int"})
 
-    cluster_area_df = pd.DataFrame(list(cluster_area.items()), columns=["cluster_id", "cluster_area"])
-    cluster_area_df = cluster_area_df.astype({"cluster_id": "int"})
-
     # 필지 데이터와 클러스터링 결과값 병합
     lot_df["cluster_id"] = cluster_id_df["cluster_id"]
 
-    # base_df에 소득 분위에 맞는 사회 평판 배정
-    clustering_result_df = pd.merge(lot_df, cluster_area_df, left_on="cluster_id", right_on="cluster_id")
-
     # Excel 파일로 내보내기
-    output_filename = f"checkpoint_{output_file_name}.csv"
-    clustering_result_df.to_csv("./checkpoints/" + output_filename, index=False,encoding='UTF-8')
+    output_filename = f"checkpoint_{output_filename}.csv"
+    lot_df.to_csv(f"./checkpoints/{output_filename}_{input_filename}", index=False,encoding='UTF-8')
 
     print("Checkpoint Save Completed")
 
     return lot_df
 
 
-def save_json_result(checkpoint,output_file_name):
+def save_json_result(input_filename,output_filename,checkpoint):
     '''
     check point의 정보를 json으로 반환하는 코드
     :param checkpoint: 결과값
@@ -69,14 +64,14 @@ def save_json_result(checkpoint,output_file_name):
     '''
 
     cluster_unique_id_list = checkpoint["cluster_id"].unique().tolist()
-    result_dict = {'Algorithm': 'DBSCAN Clustering', 'TaskList': {}}
+    result_dict = {'Algorithm': 'MCF Clustering', 'TaskList': {}}
 
     cluster_unique_id_result = checkpoint["cluster_id"].unique().tolist()
 
     for key in cluster_unique_id_result:
         polygon_list_dict = {'PolygonList': {}}
         lot_polygon_list_per_task = checkpoint.loc[
-            checkpoint["cluster_id"] == key, "geometry"].tolist()
+            checkpoint["cluster_id"] == key,checkpoint.columns[4]].tolist()
 
         for i, polygon in enumerate(lot_polygon_list_per_task):
             polygon_coordinate_per_lot_list = eval(polygon)["coordinates"][0][0]
@@ -84,7 +79,7 @@ def save_json_result(checkpoint,output_file_name):
 
         result_dict['TaskList']['Task' + str(key)] = polygon_list_dict
 
-    file_path = f"./results/result_{output_file_name}.json"
+    file_path = f"./results/result_{output_filename}_{input_filename}.json"
     with open(file_path, 'w', encoding='utf-8') as file:
         json.dump(result_dict, file)
 
@@ -93,17 +88,17 @@ def save_json_result(checkpoint,output_file_name):
     return
 
 
-def save_visualization_result(tmp_x, tmp_y, cluster_id,file_name):
+def save_visualization_result(tmp_x, tmp_y, cluster_id,filename):
     plt.scatter(tmp_x, tmp_y, c=cluster_id)
-    plt.savefig(f'./clustering_result_img/{get_now_datetime() + file_name}.jpg', dpi=300)
+    plt.savefig(f'./clustering_result_img/{get_now_datetime() + filename}.jpg', dpi=300)
 
     print("Visualization Save Completed")
 
     return
 
-def save_visualization_pre_result(timp_x,tmp_y,file_name):
+def save_visualization_pre_result(timp_x,tmp_y,filename):
     plt.scatter(timp_x,tmp_y)
-    plt.savefig(f'./preclustering_img/{get_now_datetime()+ file_name}.jpg', dpi=300)
+    plt.savefig(f'./preclustering_img/{get_now_datetime()+ filename}.jpg', dpi=300)
     
 def split_integer_randomly(num, n):
     parts = sorted(random.sample(range(1, num), n - 1))

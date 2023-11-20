@@ -65,33 +65,10 @@ def mcf_solver(areas: np.ndarray, requested_areas: np.ndarray, costs: np.ndarray
     status = smcf.solve()
 
     if status == smcf.OPTIMAL:
-        # print("Total cost = ", smcf.optimal_cost())
-        # print()
-        # for arc in range(smcf.num_arcs()):
-        #     # Can ignore arcs leading out of source or into sink.
-        #     if smcf.tail(arc) != source and smcf.head(arc) != sink:
-        #         # Arcs in the solution have a flow value of 1. Their start and end nodes
-        #         # give an assignment of worker to task.
-        #         if smcf.flow(arc) > 0:
-                    
-        #             # print(
-        #             #     "Worker %d assigned to task %d.  Cost = %d"
-        #             #     % (smcf.tail(arc), smcf.head(arc), smcf.unit_cost(arc))
-        #             # )
-        #             labels_M = (np.array([smcf.flow(i) for i in range(len(areas) * len(requested_areas))])
-        #             .reshape(len(areas), len(requested_areas))
-        #             .astype("int32"))
-        #             labels = labels_M.argmax(axis=1)
-                    
-        #             print(len(labels))
-                    
-        #             return labels
         labels_M = (np.array([smcf.flow(i) for i in range(num_areas, num_areas * num_teams + num_areas)])
                     .reshape(len(areas), len(requested_areas))
                     .astype("int32"))
         labels = labels_M.argmax(axis=1)
-        
-        print(len(labels))
         
         return labels
                     

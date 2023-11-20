@@ -1,3 +1,5 @@
 clusetring_result_img/*
 preclustering_imng/*
+results/*
+checkpoints/*
 __pycache__
